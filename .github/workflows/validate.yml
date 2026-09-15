@@ -16,8 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Show project files
-        run: ls -la
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
 
-      - name: Check Git
-        run: git --version
+      - name: Validate Databricks Bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+        run: databricks bundle validate -t dev
